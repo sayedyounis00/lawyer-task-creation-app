@@ -1,7 +1,9 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { purgeExpiredCompletedTasks } from "@/lib/data";
 import { passwordsMatch, clearSession, getSession, setSession } from "@/lib/session";
+import { checkDeviceSubscription } from "@/lib/subscription";
 import { supabaseServer } from "@/lib/supabase";
 import type { ActionState } from "@/lib/types";
 
@@ -16,7 +18,14 @@ function nullable(value: string) {
 
 async function requireSession() {
   const session = await getSession();
-  if (!session) throw new Error("Sign in with your device ID first.");
+  if (!session) throw new Error("يرجى تسجيل الدخول باستخدام مفتاح الجهاز أولاً.");
+
+  const sub = await checkDeviceSubscription(session.deviceId);
+  if (!sub.isActive) {
+    await clearSession();
+    throw new Error(sub.message || "انتهت صلاحية اشتراك هذا الجهاز. يرجى سداد الاشتراك لتسجيل الدخول.");
+  }
+
   return session;
 }
 
@@ -24,7 +33,7 @@ export async function signIn(_prev: ActionState, form: FormData): Promise<Action
   const deviceId = field(form, "deviceId");
   const password = field(form, "password");
   if (!deviceId || !password) {
-    return { ok: false, message: "Enter the device ID and admin password." };
+    return { ok: false, message: "يرجى إدخال مفتاح الجهاز وكلمة مرور المدير." };
   }
 
   const { data, error } = await supabaseServer()
@@ -35,14 +44,22 @@ export async function signIn(_prev: ActionState, form: FormData): Promise<Action
 
   if (error) return { ok: false, message: error.message };
   if (!data || !passwordsMatch(data.password, password)) {
-    return { ok: false, message: "That device ID and password do not match." };
+    return { ok: false, message: "مفتاح الجهاز وكلمة المرور غير متطابقين." };
+  }
+
+  const sub = await checkDeviceSubscription(deviceId);
+  if (!sub.isActive) {
+    return {
+      ok: false,
+      message: sub.message || "اشتراك هذا الجهاز غير سارٍ أو منتهي الصلاحية. يرجى سداد الاشتراك لتسجيل الدخول.",
+    };
   }
 
   await setSession({
     deviceId: data.device_id,
-    officeName: data.name || "Office",
+    officeName: data.name || "مكتب المحاماة",
   });
-  return { ok: true, message: "Signed in." };
+  return { ok: true, message: "تم تسجيل الدخول بنجاح." };
 }
 
 export async function signOut() {
@@ -53,11 +70,11 @@ export async function saveTask(_prev: ActionState, form: FormData): Promise<Acti
   const session = await requireSession();
   const id = field(form, "id");
   const title = field(form, "title");
-  if (!title) return { ok: false, message: "A task needs a title." };
+  if (!title) return { ok: false, message: "عنوان المهمة مطلوب." };
 
   const assignedMemberId = nullable(field(form, "assignedMemberId"));
   if (!assignedMemberId) {
-    return { ok: false, message: "Please assign this task to a team member." };
+    return { ok: false, message: "يرجى تعيين هذه المهمة لأحد أعضاء الفريق." };
   }
 
   const { data: member, error: memberErr } = await supabaseServer()
@@ -68,13 +85,32 @@ export async function saveTask(_prev: ActionState, form: FormData): Promise<Acti
     .maybeSingle();
 
   if (memberErr) return { ok: false, message: memberErr.message };
-  if (!member) return { ok: false, message: "Choose a valid team member from this office." };
+  if (!member) return { ok: false, message: "يرجى اختيار عضو فريق معتمد في هذا المكتب." };
   const assignedTo = member.name;
+
+  const status = field(form, "status") || "pending_review";
+  let completedAt: string | null = null;
+  if (status === "completed") {
+    if (id) {
+      const { data: existing } = await supabaseServer()
+        .from("tasks")
+        .select("status, completed_at")
+        .eq("id", id)
+        .eq("device_id", session.deviceId)
+        .maybeSingle();
+      completedAt =
+        existing?.status === "completed" && existing?.completed_at
+          ? existing.completed_at
+          : new Date().toISOString();
+    } else {
+      completedAt = new Date().toISOString();
+    }
+  }
 
   const row = {
     title,
     description: nullable(field(form, "description")),
-    status: field(form, "status") || "pending_review",
+    status,
     priority: field(form, "priority") || "medium",
     deadline_date: nullable(field(form, "deadlineDate")),
     deadline_time: nullable(field(form, "deadlineTime")),
@@ -84,6 +120,7 @@ export async function saveTask(_prev: ActionState, form: FormData): Promise<Acti
     case_title: nullable(field(form, "caseTitle")),
     device_id: session.deviceId,
     source: "admin_app",
+    completed_at: completedAt,
     updated_at: new Date().toISOString(),
   };
 
@@ -93,14 +130,15 @@ export async function saveTask(_prev: ActionState, form: FormData): Promise<Acti
     : await db.from("tasks").insert(row);
 
   if (result.error) return { ok: false, message: result.error.message };
+  await purgeExpiredCompletedTasks(session.deviceId);
   revalidatePath("/");
-  return { ok: true, message: id ? "Task updated." : "Task saved." };
+  return { ok: true, message: id ? "تم تحديث المهمة بنجاح." : "تم حفظ المهمة بنجاح." };
 }
 
 export async function deleteTask(form: FormData): Promise<ActionState> {
   const session = await requireSession();
   const id = field(form, "id");
-  if (!id) return { ok: false, message: "Missing task." };
+  if (!id) return { ok: false, message: "المهمة غير محددة." };
   const { error } = await supabaseServer()
     .from("tasks")
     .delete()
@@ -108,33 +146,38 @@ export async function deleteTask(form: FormData): Promise<ActionState> {
     .eq("device_id", session.deviceId);
   if (error) return { ok: false, message: error.message };
   revalidatePath("/");
-  return { ok: true, message: "Task deleted." };
+  return { ok: true, message: "تم حذف المهمة." };
 }
 
 export async function updateTaskStatus(id: string, newStatus: string): Promise<ActionState> {
   const session = await requireSession();
-  if (!id || !newStatus) return { ok: false, message: "Invalid request." };
+  if (!id || !newStatus) return { ok: false, message: "طلب غير صالح." };
+
+  const completedAt = newStatus === "completed" ? new Date().toISOString() : null;
+
   const { error } = await supabaseServer()
     .from("tasks")
     .update({
       status: newStatus,
+      completed_at: completedAt,
       updated_at: new Date().toISOString(),
     })
     .eq("id", id)
     .eq("device_id", session.deviceId);
 
   if (error) return { ok: false, message: error.message };
+  await purgeExpiredCompletedTasks(session.deviceId);
   revalidatePath("/");
-  return { ok: true, message: "Status updated." };
+  return { ok: true, message: "تم تحديث حالة المهمة." };
 }
 
 export async function addMember(_prev: ActionState, form: FormData): Promise<ActionState> {
   const session = await requireSession();
   const name = field(form, "name");
   const username = field(form, "username");
-  const roleName = field(form, "roleName") || "Team member";
+  const roleName = field(form, "roleName") || "عضو فريق";
   if (!name || !username) {
-    return { ok: false, message: "Name and username are required." };
+    return { ok: false, message: "الاسم واسم المستخدم مطلوبان." };
   }
 
   const roleId =
@@ -157,5 +200,5 @@ export async function addMember(_prev: ActionState, form: FormData): Promise<Act
 
   if (error) return { ok: false, message: error.message };
   revalidatePath("/");
-  return { ok: true, message: "Team member added." };
+  return { ok: true, message: "تمت إضافة عضو الفريق بنجاح." };
 }

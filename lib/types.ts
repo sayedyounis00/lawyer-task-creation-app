@@ -17,6 +17,7 @@ export type Task = {
   client_name: string | null;
   case_title: string | null;
   source: string;
+  completed_at: string | null;
   created_at: string;
   updated_at: string;
 };

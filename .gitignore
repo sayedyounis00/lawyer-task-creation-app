@@ -30,11 +30,11 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (track .env, keep local overrides private)
+# env files (never commit secrets — use platform env vars in production)
+.env
+.env.*
 .env.local
 .env.*.local
-!.env
-!.env.example
 
 # vercel
 .vercel

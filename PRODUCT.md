@@ -31,11 +31,10 @@ Existing tables: `device_managers` (login: `device_id` + plaintext `password`), 
 - Login: `device_managers` only, matching `device_id` and `password`.
 - After login, read/write `tasks` and `team_members` for that `device_id` only.
 - Tasks: create, edit, delete, show status, assign to a team member (`assigned_member_id` plus `assigned_to` name).
-- Team members: list and add.
+- Team members: view-only list for assigning tasks and monitoring workload; member roster is managed externally.
 - Do not invent extra product tables. Do not display manager passwords.
 - `tasks.assigned_member_id` already foreign-keys to `team_members.id`; keep using it.
-- Task `source` for this app: `admin_app`. Status values in use include `pending_review` (default).
-- Undecided: Arabic UI vs English chrome with Arabic names as data. This session uses English chrome, `dir="auto"` on people/case text.
+- Interface: Full Arabic UI with native RTL layout and Cairo typography (`lang="ar" dir="rtl"`).
 
 ## Brand Commitments
 

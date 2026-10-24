@@ -1,21 +1,39 @@
-import type { Metadata } from "next";
-import { Source_Sans_3 } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Cairo } from "next/font/google";
 import "./globals.css";
 
-const sourceSans = Source_Sans_3({
-  variable: "--font-source-sans",
-  subsets: ["latin", "latin-ext"],
+const cairo = Cairo({
+  variable: "--font-cairo",
+  subsets: ["arabic", "latin"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
-  title: "Office desk",
-  description: "Assign office tasks to team members for a registered device.",
+  title: "منصة مهام مكتب المحاماة",
+  description: "إدارة وتوزيع مهام مكتب المحاماة على فريق العمل للأجهزة المعتمدة.",
+  icons: {
+    icon: "/icon.png",
+    apple: "/icon.png",
+  },
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#0F1115",
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="en" className={`${sourceSans.variable} h-full antialiased`}>
-      <body className="min-h-full font-sans">{children}</body>
+    <html lang="ar" dir="rtl" className={`${cairo.variable} dark h-full antialiased`} data-theme="dark" suppressHydrationWarning>
+      <body className="min-h-full font-sans bg-[var(--bg-main)] text-[var(--text-primary)]">
+        {children}
+      </body>
     </html>
   );
 }
