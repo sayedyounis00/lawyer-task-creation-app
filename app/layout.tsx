@@ -21,7 +21,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: "#0F1115",
+  themeColor: "#0F2A47",
 };
 
 export default function RootLayout({
@@ -30,7 +30,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ar" dir="rtl" className={`${cairo.variable} dark h-full antialiased`} data-theme="dark" suppressHydrationWarning>
+    <html lang="ar" dir="rtl" className={`${cairo.variable} h-full antialiased`} data-theme="light" suppressHydrationWarning>
       <body className="min-h-full font-sans bg-[var(--bg-main)] text-[var(--text-primary)]">
         {children}
       </body>

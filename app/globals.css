@@ -1,32 +1,79 @@
 @import "tailwindcss";
 
 :root {
-  color-scheme: dark;
-  --bg-main: #0f1115;
-  --surface: #1a1d23;
-  --surface-raised: #22262e;
-  --surface-subtle: #14171d;
-  --border-subtle: #2d323b;
-  --border-strong: #3e4451;
-  --text-primary: #f3f4f6;
-  --text-secondary: #9ca3af;
-  --text-muted: #6b7280;
-  --brand-primary: #818cf8;
-  --brand-hover: #6366f1;
-  --brand-light: #312e81;
-  --danger: #f87171;
-  --danger-light: #450a0a;
-  --danger-border: #7f1d1d;
-  --success: #4ade80;
-  --success-light: #064e3b;
-  --success-border: #065f46;
-  --warning: #fbbf24;
-  --warning-light: #451a03;
-  --warning-border: #78350f;
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.4);
-  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.6), 0 8px 10px -6px rgb(0 0 0 / 0.5);
+  color-scheme: light;
+
+  /* Surfaces & Layout (Section 7) */
+  --bg-main: #f4f5f7;              /* Neutral 100 - surface-app-bg */
+  --surface: #ffffff;              /* Neutral 0 - surface-card */
+  --surface-raised: #ffffff;       /* Modals, sheets, raised cards */
+  --surface-subtle: #f4f5f7;       /* Neutral 100 - panel background */
+  --surface-sidebar: #0f2a47;      /* Primary / Navy 900 - dark surface light anchor */
+  --surface-header: #ffffff;       /* Top bar */
+
+  /* Borders & Dividers (Section 4) */
+  --border-subtle: #e7e9ec;        /* Neutral 200 - Table zebra, card borders */
+  --border-strong: #d0d4da;        /* Neutral 300 - Input outlines, dividers */
+
+  /* Typography / Text (Section 8) */
+  --text-primary: #1a1d21;         /* Neutral 900 - Headings, body text */
+  --text-secondary: #3f444b;       /* Neutral 700 - Supporting text, table body */
+  --text-muted: #6b7280;           /* Neutral 500 - Timestamps, metadata, placeholders */
+  --text-disabled: #a7acb4;        /* Disabled labels */
+  --text-on-primary: #ffffff;      /* Text on navy buttons/sidebar */
+  --text-link: #2f5a85;            /* Primary / Navy 500 - Default link */
+  --text-link-hover: #1e3f63;      /* Primary / Navy 700 - Link hover */
+
+  /* Brand / Primary (Navy Scale - Section 2) */
+  --brand-primary: #0f2a47;        /* Primary / Navy 900 - Header bar, primary buttons */
+  --brand-hover: #1e3f63;          /* Primary / Navy 700 - Button hover, active states */
+  --brand-navy-500: #2f5a85;       /* Primary / Navy 500 - Links, icon accents, focus outlines */
+  --brand-navy-300: #7fa0c0;       /* Primary / Navy 300 - Secondary icons, disabled-primary */
+  --brand-light: #dce6f0;          /* Primary / Navy 100 - Selected row bg, subtle highlight */
+
+  /* Accent Colors (Brass Scale - Section 3) */
+  --accent-brass: #a6802b;         /* Accent / Brass 600 - Key CTAs, badges */
+  --accent-brass-hover: #8f6c23;   /* Accent button hover */
+  --accent-brass-400: #c9a24c;     /* Accent / Brass 400 - Highlighted figures */
+  --accent-brass-light: #f3e9d2;   /* Accent / Brass 100 - Accent background chips */
+
+  /* Semantic / Status Colors (Section 5) */
+  --success: #1e7a4c;              /* Success Text / Icon */
+  --success-light: #e5f4ec;        /* Success Background */
+  --success-border: #b8e0c9;       /* Success Border */
+
+  --warning: #b4741b;              /* Warning Text / Icon */
+  --warning-light: #fbefdd;        /* Warning Background */
+  --warning-border: #efce9c;       /* Warning Border */
+
+  --danger: #b3261e;               /* Danger / Critical Text / Icon */
+  --danger-light: #fbe7e6;         /* Danger Background */
+  --danger-border: #f0b6b2;        /* Danger Border */
+  --danger-hover: #8f1d17;         /* Danger Button Hover */
+
+  --info: #1f5fa8;                 /* Info Text / Icon */
+  --info-light: #e7f0fa;           /* Info Background */
+  --info-border: #bbd7ef;          /* Info Border */
+
+  --neutral-status: #5b6472;       /* Neutral / Pending Text / Icon */
+  --neutral-status-light: #edeef1; /* Neutral / Pending Background */
+  --neutral-status-border: #d3d6dc;/* Neutral / Pending Border */
+
+  /* Priority Tags (Section 6) */
+  --priority-urgent-text: #8c1e17;
+  --priority-urgent-bg: #fadcda;
+  --priority-high-text: #b4741b;
+  --priority-high-bg: #fbefdd;
+  --priority-standard-text: #2f5a85;
+  --priority-standard-bg: #dce6f0;
+  --priority-low-text: #5b6472;
+  --priority-low-bg: #edeef1;
+
+  /* Elevation Shadows for Light Canvas */
+  --shadow-sm: 0 1px 2px 0 rgb(15 42 71 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(15 42 71 / 0.07), 0 2px 4px -2px rgb(15 42 71 / 0.05);
+  --shadow-lg: 0 10px 15px -3px rgb(15 42 71 / 0.08), 0 4px 6px -4px rgb(15 42 71 / 0.04);
+  --shadow-xl: 0 20px 25px -5px rgb(15 42 71 / 0.10), 0 8px 10px -6px rgb(15 42 71 / 0.05);
   --bottom-bar-height: 64px;
 }
 
@@ -35,23 +82,42 @@
   --color-surface: var(--surface);
   --color-surface-raised: var(--surface-raised);
   --color-surface-subtle: var(--surface-subtle);
+  --color-surface-sidebar: var(--surface-sidebar);
+  --color-surface-header: var(--surface-header);
   --color-border-subtle: var(--border-subtle);
   --color-border-strong: var(--border-strong);
   --color-text-primary: var(--text-primary);
   --color-text-secondary: var(--text-secondary);
   --color-text-muted: var(--text-muted);
+  --color-text-disabled: var(--text-disabled);
+  --color-text-on-primary: var(--text-on-primary);
+  --color-text-link: var(--text-link);
+  --color-text-link-hover: var(--text-link-hover);
   --color-brand-primary: var(--brand-primary);
   --color-brand-hover: var(--brand-hover);
+  --color-brand-navy-500: var(--brand-navy-500);
+  --color-brand-navy-300: var(--brand-navy-300);
   --color-brand-light: var(--brand-light);
+  --color-accent-brass: var(--accent-brass);
+  --color-accent-brass-hover: var(--accent-brass-hover);
+  --color-accent-brass-400: var(--accent-brass-400);
+  --color-accent-brass-light: var(--accent-brass-light);
   --color-danger: var(--danger);
   --color-danger-light: var(--danger-light);
   --color-danger-border: var(--danger-border);
+  --color-danger-hover: var(--danger-hover);
   --color-success: var(--success);
   --color-success-light: var(--success-light);
   --color-success-border: var(--success-border);
   --color-warning: var(--warning);
   --color-warning-light: var(--warning-light);
   --color-warning-border: var(--warning-border);
+  --color-info: var(--info);
+  --color-info-light: var(--info-light);
+  --color-info-border: var(--info-border);
+  --color-neutral-status: var(--neutral-status);
+  --color-neutral-status-light: var(--neutral-status-light);
+  --color-neutral-status-border: var(--neutral-status-border);
   --font-sans: var(--font-cairo), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
@@ -70,17 +136,12 @@ body {
 }
 
 ::selection {
-  background: #c7d2fe;
-  color: #1e1b4b;
-}
-
-.dark ::selection {
-  background: #3730a3;
-  color: #e0e7ff;
+  background: var(--brand-light);
+  color: var(--brand-primary);
 }
 
 :focus-visible {
-  outline: 2px solid var(--brand-primary);
+  outline: 2px solid var(--brand-navy-500);
   outline-offset: 2px;
 }
 
@@ -94,7 +155,7 @@ button {
 input,
 textarea,
 select {
-  caret-color: var(--brand-primary);
+  caret-color: var(--brand-navy-500);
 }
 
 /* Custom refined scrollbar */
@@ -113,15 +174,15 @@ select {
 }
 
 .desk-scroll::-webkit-scrollbar-thumb:hover {
-  background: var(--text-secondary);
+  background: var(--text-muted);
 }
 
 /* Control and button primitives with minimum 48px touch targets */
 .control {
   min-height: 48px;
   width: 100%;
-  border: 1px solid var(--border-subtle);
-  background: var(--surface-raised);
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
   color: var(--text-primary);
   padding: 0.625rem 0.875rem;
   border-radius: 0.5rem;
@@ -129,20 +190,25 @@ select {
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
+.control::placeholder {
+  color: var(--text-muted);
+}
+
 .control:hover:not(:disabled) {
-  border-color: var(--border-strong);
+  border-color: var(--brand-navy-300);
 }
 
 .control:focus {
-  border-color: var(--brand-primary);
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+  border-color: var(--brand-navy-500);
+  box-shadow: 0 0 0 3px rgba(220, 230, 240, 0.7);
   outline: none;
 }
 
 .control:disabled {
-  opacity: 0.55;
+  opacity: 0.7;
   cursor: not-allowed;
   background: var(--surface-subtle);
+  color: var(--text-disabled);
 }
 
 .btn {
@@ -168,59 +234,65 @@ select {
 
 .btn-primary {
   background: var(--brand-primary);
-  color: #ffffff;
-  box-shadow: 0 2px 4px 0 rgba(79, 70, 229, 0.25);
-}
-
-.dark .btn-primary {
-  color: #0f1115;
-  font-weight: 700;
+  color: var(--text-on-primary);
+  box-shadow: 0 1px 3px 0 rgba(15, 42, 71, 0.2);
 }
 
 .btn-primary:hover:not(:disabled) {
   background: var(--brand-hover);
-  box-shadow: 0 4px 10px -1px rgba(79, 70, 229, 0.4);
+  box-shadow: 0 3px 8px -1px rgba(15, 42, 71, 0.3);
 }
 
 .btn-secondary {
-  background: var(--surface-raised);
-  color: var(--text-primary);
-  border-color: var(--border-subtle);
+  background: #ffffff;
+  color: var(--brand-primary);
+  border: 1.5px solid var(--brand-primary);
   box-shadow: var(--shadow-sm);
 }
 
 .btn-secondary:hover:not(:disabled) {
-  background: var(--surface);
-  border-color: var(--border-strong);
+  background: var(--brand-light);
+}
+
+.btn-accent {
+  background: var(--accent-brass);
+  color: #ffffff;
+  box-shadow: 0 1px 3px 0 rgba(166, 128, 43, 0.25);
+}
+
+.btn-accent:hover:not(:disabled) {
+  background: var(--accent-brass-hover);
 }
 
 .btn-ghost {
   background: transparent;
-  color: var(--text-secondary);
+  color: var(--text-link);
 }
 
 .btn-ghost:hover:not(:disabled) {
-  background: var(--surface);
-  color: var(--text-primary);
+  background: var(--surface-subtle);
+  color: var(--text-link-hover);
 }
 
 .btn-danger {
-  background: var(--danger-light);
-  color: var(--danger);
-  border-color: var(--danger-border);
+  background: var(--danger);
+  color: #ffffff;
+  box-shadow: 0 1px 3px 0 rgba(179, 38, 30, 0.2);
 }
 
 .btn-danger:hover:not(:disabled) {
-  background: var(--danger);
-  color: #ffffff;
+  background: var(--danger-hover);
 }
 
 .btn:disabled {
-  opacity: 0.55;
+  background: #e7e9ec;
+  color: var(--text-disabled);
+  border-color: transparent;
   cursor: not-allowed;
+  opacity: 0.85;
 }
 
-/* Status Chips */
+/* Status Chips (Section 5) */
 .status-chip {
   display: inline-flex;
   align-items: center;
@@ -239,9 +311,9 @@ select {
 }
 
 .status-in_progress {
-  background: var(--brand-light);
-  color: var(--brand-primary);
-  border: 1px solid var(--brand-primary);
+  background: var(--info-light);
+  color: var(--info);
+  border: 1px solid var(--info-border);
 }
 
 .status-completed {
@@ -256,22 +328,35 @@ select {
   border: 1px solid var(--danger-border);
 }
 
-/* Priority Indicators */
-.priority-high {
-  background: var(--danger-light);
-  color: var(--danger);
+.status-pending {
+  background: var(--neutral-status-light);
+  color: var(--neutral-status);
+  border: 1px solid var(--neutral-status-border);
+}
+
+/* Priority Indicators (Section 6) */
+.priority-urgent {
+  background: var(--priority-urgent-bg);
+  color: var(--priority-urgent-text);
   border: 1px solid var(--danger-border);
 }
 
-.priority-medium {
-  background: var(--warning-light);
-  color: var(--warning);
+.priority-high {
+  background: var(--priority-high-bg);
+  color: var(--priority-high-text);
   border: 1px solid var(--warning-border);
 }
 
+.priority-medium,
+.priority-standard {
+  background: var(--priority-standard-bg);
+  color: var(--priority-standard-text);
+  border: 1px solid var(--brand-light);
+}
+
 .priority-low {
-  background: var(--surface);
-  color: var(--text-secondary);
+  background: var(--priority-low-bg);
+  color: var(--priority-low-text);
   border: 1px solid var(--border-subtle);
 }
 
@@ -286,7 +371,7 @@ select {
   font-weight: 600;
   border-radius: 9999px;
   border: 1px solid var(--border-subtle);
-  background: var(--surface-raised);
+  background: var(--surface);
   color: var(--text-secondary);
   cursor: pointer;
   transition: all 0.15s ease;
@@ -294,7 +379,7 @@ select {
 }
 
 .filter-chip:hover:not(.active) {
-  background: var(--surface);
+  background: var(--surface-subtle);
   color: var(--text-primary);
   border-color: var(--border-strong);
 }
@@ -303,11 +388,7 @@ select {
   background: var(--brand-primary);
   color: #ffffff;
   border-color: var(--brand-primary);
-  box-shadow: 0 2px 4px rgba(79, 70, 229, 0.25);
-}
-
-.dark .filter-chip.active {
-  color: #0f1115;
+  box-shadow: 0 2px 4px rgba(15, 42, 71, 0.18);
 }
 
 /* Bottom Navigation Bar */
@@ -323,17 +404,14 @@ select {
   border-radius: 9999px;
   background: var(--brand-primary);
   color: #ffffff;
-  box-shadow: 0 4px 14px 0 rgba(79, 70, 229, 0.45);
+  box-shadow: 0 4px 14px 0 rgba(15, 42, 71, 0.35);
   transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.15s ease;
-}
-
-.dark .center-fab {
-  color: #0f1115;
 }
 
 .center-fab:hover {
   transform: translateY(-2px) scale(1.04);
-  box-shadow: 0 8px 20px 0 rgba(79, 70, 229, 0.55);
+  background: var(--brand-hover);
+  box-shadow: 0 8px 20px 0 rgba(15, 42, 71, 0.45);
 }
 
 .center-fab:active {

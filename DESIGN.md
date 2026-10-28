@@ -8,22 +8,26 @@ A lightning-fast, tactile task command center with a 5-destination bottom naviga
 
 ## 2. Design Tokens
 
-### Color Tokens (Light & Dark)
+### Color Tokens (Legal CRM Schema — Light Theme Only)
 
-| Token | Light | Dark | Role |
+| Token | Hex | Role | Usage |
 |---|---|---|---|
-| `--bg-main` | `#FFFFFF` | `#0F1115` | Canvas background |
-| `--surface` | `#F5F6F8` | `#1A1D23` | Cards, elevated surfaces, sheets |
-| `--surface-raised` | `#FFFFFF` | `#22262E` | Modals, drawers, popovers |
-| `--border-subtle` | `#E5E7EB` | `#2D323B` | Structural dividers, card borders |
-| `--border-strong` | `#D1D5DB` | `#3E4451` | Focus states, active borders |
-| `--text-primary` | `#111827` | `#F3F4F6` | Primary titles, bold labels |
-| `--text-secondary` | `#6B7280` | `#9CA3AF` | Meta copy, timestamps, secondary labels |
-| `--brand-primary` | `#4F46E5` | `#818CF8` | Primary action accent, active tabs, FAB |
-| `--brand-hover` | `#4338CA` | `#6366F1` | Interactive hover & pressed state |
-| `--danger` | `#DC2626` | `#F87171` | Overdue badge, delete action, alerts |
-| `--success` | `#16A34A` | `#4ADE80` | Completed state, success confirmations |
-| `--warning` | `#D97706` | `#FBBF24` | Pending review, medium priority |
+| `--bg-main` | `#F4F5F7` | Neutral 100 | Main application canvas |
+| `--surface` | `#FFFFFF` | Neutral 0 | Primary surface, cards, panels |
+| `--surface-raised` | `#FFFFFF` | Neutral 0 | Modals, drawers, sheets |
+| `--surface-sidebar` | `#0F2A47` | Navy 900 | Left navigation light anchor |
+| `--border-subtle` | `#E7E9EC` | Neutral 200 | Table zebra striping, card borders |
+| `--border-strong` | `#D0D4DA` | Neutral 300 | Input outlines, structural dividers |
+| `--text-primary` | `#1A1D21` | Neutral 900 | Primary body text, headings |
+| `--text-secondary` | `#3F444B` | Neutral 700 | Supporting text, table body text |
+| `--text-muted` | `#6B7280` | Neutral 500 | Placeholder text, timestamps |
+| `--brand-primary` | `#0F2A47` | Navy 900 | Header bar, primary buttons, active nav |
+| `--brand-hover` | `#1E3F63` | Navy 700 | Primary button hover, active states |
+| `--brand-light` | `#DCE6F0` | Navy 100 | Selected row bg, subtle highlight |
+| `--accent-brass` | `#A6802B` | Brass 600 | Key CTAs, badges, VIP tags |
+| `--danger` | `#B3261E` | Danger | Overdue filings, past-due, alerts |
+| `--success` | `#1E7A4C` | Success | Completed tasks, paid invoices |
+| `--warning` | `#B4741B` | Warning | Pending review, approaching deadlines |
 
 ### Dimensions & Spatial Scale
 

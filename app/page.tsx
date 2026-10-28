@@ -37,10 +37,10 @@ async function Home() {
 
   if (!session || subscriptionInactiveMessage) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-950 px-4 py-12 text-slate-100">
+      <div className="flex min-h-screen items-center justify-center bg-[var(--bg-main)] px-4 py-12 text-[var(--text-primary)]">
         <main className="w-full max-w-md">
           <div className="mb-6 text-center">
-            <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-600/20 text-indigo-400 ring-1 ring-indigo-500/30">
+            <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--brand-primary)] text-white shadow-md">
               <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
                   strokeLinecap="round"
@@ -50,14 +50,14 @@ async function Home() {
                 />
               </svg>
             </div>
-            <div className="inline-flex items-center gap-1.5 rounded-full bg-slate-900 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-indigo-400 ring-1 ring-slate-800">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <div className="inline-flex items-center gap-1.5 rounded-full bg-[var(--brand-light)] px-3 py-1 text-xs font-semibold uppercase tracking-wider text-[var(--brand-primary)] ring-1 ring-[var(--border-strong)]">
+              <span className="h-1.5 w-1.5 rounded-full bg-[var(--success)] animate-pulse" />
               منصة إدارة العمل القانوني
             </div>
-            <h1 className="mt-3 text-2xl font-bold tracking-tight text-white sm:text-3xl">
+            <h1 className="mt-3 text-2xl font-bold tracking-tight text-[var(--text-primary)] sm:text-3xl">
               مكتب مهام المحاماة
             </h1>
-            <p className="mt-2 text-sm text-slate-400">
+            <p className="mt-2 text-sm text-[var(--text-secondary)]">
               تسجيل الدخول المصرح به لإدارة القضايا، توزيع المهام، ومتابعة فريق العمل.
             </p>
           </div>
@@ -65,27 +65,25 @@ async function Home() {
           {subscriptionInactiveMessage && (
             <div
               role="alert"
-              className="mb-6 rounded-2xl border border-red-500/40 bg-red-950/60 p-4 text-red-200 backdrop-blur shadow-lg"
+              className="mb-6 rounded-2xl border border-[var(--danger-border)] bg-[var(--danger-light)] p-4 text-[var(--danger)] shadow-sm"
             >
               <div className="flex items-start gap-3">
-                <svg className="h-6 w-6 shrink-0 text-red-400 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="h-6 w-6 shrink-0 text-[var(--danger)] mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
                 <div className="text-sm">
-                  <p className="font-bold text-red-300">تنبيه الاشتراك</p>
-                  <p className="mt-1 leading-relaxed text-red-200/90">{subscriptionInactiveMessage}</p>
+                  <p className="font-bold text-[var(--danger)]">تنبيه الاشتراك</p>
+                  <p className="mt-1 leading-relaxed text-[var(--danger)]">{subscriptionInactiveMessage}</p>
                 </div>
               </div>
             </div>
           )}
 
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/90 p-6 shadow-2xl backdrop-blur sm:p-8">
+          <div className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface)] p-6 shadow-xl sm:p-8">
             <LoginForm />
           </div>
 
-          <div className="mt-6 text-center text-xs text-slate-500">
-            <p>مشفر ومرتبط بالجهاز المعتمد • مزامنة فورية عبر Supabase</p>
-          </div>
+
         </main>
       </div>
     );
@@ -94,11 +92,11 @@ async function Home() {
   const desk = await loadDesk();
   if (!desk) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-950 px-4 py-12 text-slate-100">
-        <main className="w-full max-w-md rounded-2xl border border-slate-800 bg-slate-900 p-8 shadow-2xl">
+      <div className="flex min-h-screen items-center justify-center bg-[var(--bg-main)] px-4 py-12 text-[var(--text-primary)]">
+        <main className="w-full max-w-md rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface)] p-8 shadow-xl">
           <div className="mb-6 text-center">
-            <h1 className="text-xl font-bold text-white">انتهت جلسة الجهاز المصرح به</h1>
-            <p className="mt-1 text-sm text-slate-400">يرجى إعادة تسجيل الدخول للجهاز مرة أخرى.</p>
+            <h1 className="text-xl font-bold text-[var(--text-primary)]">انتهت الجلسة</h1>
+            <p className="mt-1 text-sm text-[var(--text-secondary)]">يرجى إعادة تسجيل الدخول مرة أخرى.</p>
           </div>
           <LoginForm />
         </main>

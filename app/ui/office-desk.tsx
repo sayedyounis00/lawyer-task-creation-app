@@ -350,8 +350,8 @@ export function OfficeDesk({
               onClick={() => setActiveTab("today")}
               className={`flex items-center gap-2 px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all ${
                 activeTab === "today"
-                  ? "bg-[var(--surface-raised)] text-[var(--brand-primary)] shadow-sm font-bold"
-                  : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+                  ? "bg-[var(--brand-primary)] text-white shadow-sm font-bold"
+                  : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-subtle)]"
               }`}
             >
               <span>اليوم</span>
@@ -369,8 +369,8 @@ export function OfficeDesk({
               onClick={() => setActiveTab("upcoming")}
               className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all ${
                 activeTab === "upcoming"
-                  ? "bg-[var(--surface-raised)] text-[var(--brand-primary)] shadow-sm font-bold"
-                  : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+                  ? "bg-[var(--brand-primary)] text-white shadow-sm font-bold"
+                  : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-subtle)]"
               }`}
             >
               القادمة
@@ -383,8 +383,8 @@ export function OfficeDesk({
               onClick={() => setActiveTab("lists")}
               className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all ${
                 activeTab === "lists"
-                  ? "bg-[var(--surface-raised)] text-[var(--brand-primary)] shadow-sm font-bold"
-                  : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+                  ? "bg-[var(--brand-primary)] text-white shadow-sm font-bold"
+                  : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-subtle)]"
               }`}
             >
               القوائم وفريق العمل
@@ -397,8 +397,8 @@ export function OfficeDesk({
               onClick={() => setActiveTab("settings")}
               className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all ${
                 activeTab === "settings"
-                  ? "bg-[var(--surface-raised)] text-[var(--brand-primary)] shadow-sm font-bold"
-                  : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+                  ? "bg-[var(--brand-primary)] text-white shadow-sm font-bold"
+                  : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-subtle)]"
               }`}
             >
               الإعدادات
@@ -970,7 +970,7 @@ export function OfficeDesk({
 
       {/* QUICK ADD BOTTOM SHEET */}
       {isQuickAddOpen && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-sm animate-backdrop">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-[#0F2A47]/45 backdrop-blur-sm animate-backdrop">
           <div
             className="w-full max-w-lg rounded-t-2xl sm:rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-5 shadow-2xl animate-bottom-sheet sm:animate-drawer"
             role="dialog"
@@ -1054,13 +1054,13 @@ export function OfficeDesk({
                   />
                 )}
 
-                {/* Priority Selector */}
+                {/* Priority Selector (Legal CRM Section 6 Schema) */}
                 <div className="flex items-center gap-1 bg-[var(--surface)] p-1 rounded-lg border border-[var(--border-subtle)]">
                   <button
                     type="button"
                     onClick={() => setQuickPriority("high")}
                     className={`filter-chip min-h-[38px] text-xs px-2.5 py-1 ${
-                      quickPriority === "high" ? "active bg-[var(--danger)] text-white" : ""
+                      quickPriority === "high" ? "active !bg-[var(--priority-high-bg)] !text-[var(--priority-high-text)] !border-[var(--warning-border)] font-bold" : ""
                     }`}
                   >
                     عالية
@@ -1069,7 +1069,7 @@ export function OfficeDesk({
                     type="button"
                     onClick={() => setQuickPriority("medium")}
                     className={`filter-chip min-h-[38px] text-xs px-2.5 py-1 ${
-                      quickPriority === "medium" ? "active bg-[var(--warning)] text-white" : ""
+                      quickPriority === "medium" ? "active !bg-[var(--priority-standard-bg)] !text-[var(--priority-standard-text)] !border-[var(--info-border)] font-bold" : ""
                     }`}
                   >
                     متوسطة
@@ -1078,7 +1078,7 @@ export function OfficeDesk({
                     type="button"
                     onClick={() => setQuickPriority("low")}
                     className={`filter-chip min-h-[38px] text-xs px-2.5 py-1 ${
-                      quickPriority === "low" ? "active" : ""
+                      quickPriority === "low" ? "active !bg-[var(--priority-low-bg)] !text-[var(--priority-low-text)] !border-[var(--neutral-status-border)] font-bold" : ""
                     }`}
                   >
                     منخفضة
@@ -1299,7 +1299,7 @@ function TaskCard({
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               <span>{task.deadline_date}</span>
-              {task.deadline_time && <span>• {task.deadline_time}</span>}
+              {task.deadline_time && <span>• {task.deadline_time.slice(0, 5)}</span>}
             </span>
           )}
 
@@ -1380,7 +1380,7 @@ function FullTaskDrawer({
   }, [state, onSaved]);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-start sm:justify-start bg-black/60 backdrop-blur-sm animate-backdrop">
+    <div className="fixed inset-0 z-50 flex items-center justify-start sm:justify-start bg-[#0F2A47]/45 backdrop-blur-sm animate-backdrop">
       <div
         className="h-full w-full max-w-lg bg-[var(--surface-raised)] border-e border-[var(--border-subtle)] p-6 shadow-2xl flex flex-col justify-between overflow-y-auto desk-scroll animate-drawer"
         role="dialog"
@@ -1494,7 +1494,7 @@ function FullTaskDrawer({
                 <input
                   type="time"
                   name="deadlineTime"
-                  defaultValue={task?.deadline_time || ""}
+                  defaultValue={task?.deadline_time ? task.deadline_time.slice(0, 5) : ""}
                   className="control text-sm min-h-[48px]"
                 />
               </div>
