@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { purgeExpiredCompletedTasks } from "@/lib/data";
-import { passwordsMatch, clearSession, getSession, setSession } from "@/lib/session";
+import { clearSession, getSession, setSession } from "@/lib/session";
 import { checkDeviceSubscription } from "@/lib/subscription";
 import { supabaseServer } from "@/lib/supabase";
 import type { ActionState } from "@/lib/types";
@@ -36,28 +36,19 @@ export async function signIn(_prev: ActionState, form: FormData): Promise<Action
     return { ok: false, message: "يرجى إدخال مفتاح الجهاز وكلمة مرور المدير." };
   }
 
-  const { data, error } = await supabaseServer()
-    .from("device_managers")
-    .select("device_id, name, password")
-    .eq("device_id", deviceId)
-    .maybeSingle();
+  const { data, error } = await supabaseServer(deviceId).rpc("login_device_manager", {
+    p_device_id: deviceId,
+    p_password: password,
+  });
 
   if (error) return { ok: false, message: error.message };
-  if (!data || !passwordsMatch(data.password, password)) {
-    return { ok: false, message: "مفتاح الجهاز وكلمة المرور غير متطابقين." };
-  }
-
-  const sub = await checkDeviceSubscription(deviceId);
-  if (!sub.isActive) {
-    return {
-      ok: false,
-      message: sub.message || "اشتراك هذا الجهاز غير سارٍ أو منتهي الصلاحية. يرجى سداد الاشتراك لتسجيل الدخول.",
-    };
+  if (!data || !data.success) {
+    return { ok: false, message: data?.message || "بيانات الدخول غير صحيحة (معرف الجهاز أو كلمة السر)." };
   }
 
   await setSession({
-    deviceId: data.device_id,
-    officeName: data.name || "مكتب المحاماة",
+    deviceId: data.manager.device_id,
+    officeName: data.manager.name || "مكتب المحاماة",
   });
   return { ok: true, message: "تم تسجيل الدخول بنجاح." };
 }
@@ -77,7 +68,9 @@ export async function saveTask(_prev: ActionState, form: FormData): Promise<Acti
     return { ok: false, message: "يرجى تعيين هذه المهمة لأحد أعضاء الفريق." };
   }
 
-  const { data: member, error: memberErr } = await supabaseServer()
+  const db = supabaseServer(session.deviceId);
+
+  const { data: member, error: memberErr } = await db
     .from("team_members")
     .select("id, name, device_id")
     .eq("id", assignedMemberId)
@@ -92,7 +85,7 @@ export async function saveTask(_prev: ActionState, form: FormData): Promise<Acti
   let completedAt: string | null = null;
   if (status === "completed") {
     if (id) {
-      const { data: existing } = await supabaseServer()
+      const { data: existing } = await db
         .from("tasks")
         .select("status, completed_at")
         .eq("id", id)
@@ -124,7 +117,6 @@ export async function saveTask(_prev: ActionState, form: FormData): Promise<Acti
     updated_at: new Date().toISOString(),
   };
 
-  const db = supabaseServer();
   const result = id
     ? await db.from("tasks").update(row).eq("id", id).eq("device_id", session.deviceId)
     : await db.from("tasks").insert(row);
@@ -139,7 +131,7 @@ export async function deleteTask(form: FormData): Promise<ActionState> {
   const session = await requireSession();
   const id = field(form, "id");
   if (!id) return { ok: false, message: "المهمة غير محددة." };
-  const { error } = await supabaseServer()
+  const { error } = await supabaseServer(session.deviceId)
     .from("tasks")
     .delete()
     .eq("id", id)
@@ -155,7 +147,7 @@ export async function updateTaskStatus(id: string, newStatus: string): Promise<A
 
   const completedAt = newStatus === "completed" ? new Date().toISOString() : null;
 
-  const { error } = await supabaseServer()
+  const { error } = await supabaseServer(session.deviceId)
     .from("tasks")
     .update({
       status: newStatus,
@@ -184,7 +176,7 @@ export async function addMember(_prev: ActionState, form: FormData): Promise<Act
     field(form, "roleId") ||
     `role_${roleName.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "") || "staff"}`;
 
-  const { error } = await supabaseServer().from("team_members").insert({
+  const { error } = await supabaseServer(session.deviceId).from("team_members").insert({
     device_id: session.deviceId,
     local_user_id: `usr_${Date.now()}`,
     name,

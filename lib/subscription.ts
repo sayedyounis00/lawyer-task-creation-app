@@ -16,28 +16,9 @@ export async function checkDeviceSubscription(deviceId: string): Promise<Subscri
     };
   }
 
-  const db = supabaseServer();
+  const db = supabaseServer(cleanId);
 
-  // 1. Direct device_managers check if is_active column exists
-  try {
-    const { data: dm } = await db
-      .from("device_managers")
-      .select("*")
-      .eq("device_id", cleanId)
-      .maybeSingle();
-
-    if (dm && "is_active" in dm && (dm as Record<string, unknown>).is_active === false) {
-      return {
-        isActive: false,
-        expiresAt: null,
-        message: "حساب الجهاز غير نشط حالياً. يرجى سداد الاشتراك لتسجيل الدخول.",
-      };
-    }
-  } catch {
-    // column does not exist or table query failed
-  }
-
-  // 2. Query check_device RPC (checks app_devices.is_active and expiration)
+  // Query check_device RPC (checks app_devices.is_active and expiration securely)
   try {
     const { data: rpcData, error } = await db.rpc("check_device", {
       p_device_id: cleanId,

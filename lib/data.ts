@@ -4,7 +4,7 @@ import { supabaseServer } from "@/lib/supabase";
 import type { Task, TeamMember } from "@/lib/types";
 
 export async function purgeExpiredCompletedTasks(deviceId?: string) {
-  const db = supabaseServer();
+  const db = supabaseServer(deviceId);
   const cutoff = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
 
   let query = db
@@ -34,7 +34,7 @@ export async function loadDesk() {
   // 1. Purge completed tasks older than 24h from database
   await purgeExpiredCompletedTasks(session.deviceId);
 
-  const db = supabaseServer();
+  const db = supabaseServer(session.deviceId);
   const [tasks, members] = await Promise.all([
     db
       .from("tasks")
